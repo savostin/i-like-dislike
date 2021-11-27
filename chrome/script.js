@@ -30,12 +30,11 @@
                 if (response != undefined) {
                     try {
                         if (response.dislikeCount) {
-                            const formattedDislike = numberFormat(response.dislikeCount);
-                            setDislikes(formattedDislike);
-                            statsSet = true;
+                            setLikes(numberFormat(response.likeCount));
+                            setDislikes(numberFormat(response.dislikeCount));
                         }
                     } catch (e) {
-                        statsSet = false;
+                        console.error('I Like Dislike', e);
                     }
                 }
             }
