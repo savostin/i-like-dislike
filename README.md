@@ -1,2 +1,2 @@
 # i-like-dislike
-Show YouTube dislike count
+Browser extension that shows YouTube dislike count
