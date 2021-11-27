@@ -1,0 +1,37 @@
+{
+    "name": "I Like Dislike",
+    "description": "Shows dislike counter on YouTube page",
+    "version": "0.0.0.1",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "I Like Dislike"
+    },
+    "icons": {
+        "48": "icons/icon48.png",
+        "64": "icons/icon64.png"
+    },
+    "host_permissions": ["*://*.youtube.com/*"],
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": false
+    },
+    "permissions": [
+        "storage"
+    ],
+    "content_scripts": [{
+        "matches": ["*://*.youtube.com/*"],
+        "js": ["content-script.js"],
+        "run_at": "document_start",
+        "css": ["content-style.css"]
+    }],
+    "externally_connectable": {
+        "matches": ["*://*.youtube.com/*"]
+    },
+    "web_accessible_resources": [{
+        "resources": ["script.js"],
+        "matches": ["*://*.youtube.com/*"]
+    }]
+}
