@@ -1,5 +1,5 @@
 # I Like Dislike
-Browser extension that shows YouTube dislike count
+Browser extension that shows YouTube dislike count (again).
 
 Inspired by (and partialy used):
 - https://github.com/elliotwaite/thumbnail-rating-bar-for-youtube
