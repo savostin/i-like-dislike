@@ -91,9 +91,5 @@
     document.addEventListener('yt-navigate-finish', function(event) {
         setInitalState();
     });
-    document.addEventListener('beforeunload', function(event) {
-        console.log('UnLoad');
-        chrome.extension.getBackgroundPage().console.log('UnLoad');
-    });
 
 })(document.currentScript.getAttribute('extension-id'));
