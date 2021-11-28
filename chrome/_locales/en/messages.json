@@ -19,5 +19,11 @@
     },
     "options_api_get": {
         "message": "Get your API key here"
+    },
+    "like": {
+        "message": "LIKE"
+    },
+    "dislike": {
+        "message": "DISLIKE"
     }
 }

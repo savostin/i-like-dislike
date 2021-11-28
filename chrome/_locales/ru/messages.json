@@ -19,5 +19,11 @@
     },
     "options_api_get": {
         "message": "Получить свой ключ API"
+    },
+    "like": {
+        "message": "ЛАЙК"
+    },
+    "dislike": {
+        "message": "ДИЗЛАЙК"
     }
 }
