@@ -5,14 +5,15 @@
     }
 
     function update() {
+        let videoID = getVideoId(window.location.href);
         chrome.runtime.sendMessage(
             extensionId, {
                 message: 'fetch_from_api',
-                videoId: getVideoId(window.location.href)
+                videoId: videoID
             },
             function(response) {
                 if (response != undefined) {
-                    console.log(`[I Like Dislike]: likes: ${response.likeCount}, dislikes: ${response.dislikeCount}`);
+                    console.log(`[I Like Dislike] Video: ${videoID} likes: ${response.likeCount}, dislikes: ${response.dislikeCount}`);
                     try {
                         let buttons = getButtons();
                         if (buttons) {
@@ -73,5 +74,8 @@
 
     setEventListeners();
 
+    document.addEventListener('yt-navigate-finish', function(event) {
+        update();
+    });
 
 })(document.currentScript.getAttribute('extension-id'));

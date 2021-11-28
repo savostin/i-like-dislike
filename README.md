@@ -3,8 +3,8 @@
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat)](https://github.com/savostin/i-like-dislike/blob/main/LICENSE)
 
 # I Like Dislike
-A browser extension (currently Chrome only) that shows YouTube video dislike count (again).
-Requires a Google API key for API requests or third party YouTube alternatives from invidious.io project.
+A browser extension (currently Chrome™ only) that shows YouTube™ video dislike count (again).
+Requires a Google™ API key for API requests or third party YouTube™ alternatives from invidious.io project.
 
 <img src="https://raw.githubusercontent.com/savostin/i-like-dislike/master/screen.png" />
 
