@@ -1,0 +1,23 @@
+{
+    "description": {
+        "message": "Shows dislikes counter on YouTube page"
+    },
+    "options_api_key_title": {
+        "message": "Enter your YouTube API key:"
+    },
+    "options_url_select_title": {
+        "message": "If no API key use this invidious.io project mirror as alternative:"
+    },
+    "options_url_notes": {
+        "message": "Disabled options means the mirror is not usable"
+    },
+    "options_saved": {
+        "message": "Saved"
+    },
+    "options_save": {
+        "message": "Save"
+    },
+    "options_api_get": {
+        "message": "Get your API key here"
+    }
+}

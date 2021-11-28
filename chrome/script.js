@@ -4,8 +4,23 @@
         return d ? d.querySelector('#top-level-buttons-computed') : false;
     }
 
+    function setThem(like, dislike) {
+        try {
+            let buttons = getButtons();
+            if (buttons) {
+                if (like > 0)
+                    buttons.children[0].querySelector('#text').innerText = numberFormat(like);
+                buttons.children[1].querySelector('#text').innerText = dislike ? numberFormat(dislike) : '';
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+
+    }
+
     function update() {
         let videoID = getVideoId(window.location.href);
+        setThem(0, 0)
         chrome.runtime.sendMessage(
             extensionId, {
                 message: 'fetch_from_api',
@@ -13,20 +28,8 @@
             },
             function(response) {
                 if (response != undefined) {
-                    console.log(`[I Like Dislike] Video: ${videoID}, likes: ${response.likeCount}, dislikes: ${response.dislikeCount}, error: ${response.error || ''}, url: ${response.url}`);
-                    try {
-                        let buttons = getButtons();
-                        if (buttons) {
-                            if (response.dislikeCount) {
-                                buttons.children[1].querySelector('#text').innerText = numberFormat(response.dislikeCount);
-                            }
-                            if (response.likeCount) {
-                                buttons.children[0].querySelector('#text').innerText = numberFormat(response.likeCount);
-                            }
-                        }
-                    } catch (e) {
-                        console.error(e.message);
-                    }
+                    console.log(`[I Like Dislike] Video: ${videoID}, likes: ${response.likeCount}, dislikes: ${response.dislikeCount}, error: ${response.error || ''}`);
+                    setThem(response.likeCount, response.dislikeCount)
                 }
             }
         );

@@ -1,5 +1,7 @@
 function restore() {
-    document.getElementById('save').innerText = 'Save';
+    document.querySelectorAll('[data-i18n]').forEach(entry => {
+        entry.innerText = chrome.i18n.getMessage(entry.getAttribute('data-i18n'));
+    });
     const select = document.getElementById('url');
     fetch('https://api.invidious.io/instances.json?sort_by=type,health')
         .then(response => response.json())
@@ -35,7 +37,10 @@ function restore() {
                             console.log(`${entry.name} is ${!data.likeCount && !data.dislikeCount ? 'dead' : 'OK'}`);
                             entry.opt.disabled = !data.likeCount && !data.dislikeCount;
                         })
-                        .catch(err => { reject(entry.details.uri) })
+                        .catch(err => {
+                            entry.opt.disabled = true;
+                            console.error(err);
+                        })
                 })
             })
             Promise.all(threads);
@@ -64,7 +69,7 @@ function save() {
         apiKey: document.getElementById('key').value,
         url: document.getElementById('url').value,
     }, () => {
-        document.getElementById('save').innerText = 'Saved';
+        document.getElementById('save').innerText = chrome.i18n.getMessage("options_saved");
         window.setTimeout(window.close, 1000);
     });
 

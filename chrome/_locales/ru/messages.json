@@ -1,0 +1,23 @@
+{
+    "description": {
+        "message": "Показывет количество дизлайков на странице видео YouTube"
+    },
+    "options_api_key_title": {
+        "message": "Введите Ваш ключ YouTube API:"
+    },
+    "options_url_select_title": {
+        "message": "Если ключ API не указан, использовать это зеркало проекта invidious.io:"
+    },
+    "options_url_notes": {
+        "message": "Некоторые зеркала могут быть недоступны"
+    },
+    "options_saved": {
+        "message": "Сохранено"
+    },
+    "options_save": {
+        "message": "Сохранить"
+    },
+    "options_api_get": {
+        "message": "Получить свой ключ API"
+    }
+}

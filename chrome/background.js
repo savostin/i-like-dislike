@@ -11,7 +11,6 @@ try {
                                 `${options.url}/api/v1/videos/${request.videoId}?fields=likeCount,dislikeCount`)
                             .then(response => response.json())
                             .then(data => data.items ? (data.items[0] ? data.items[0].statistics : { likeCount: 0, dislikeCount: 0 }) : data)
-                            // .then(data => { chrome.action.setTitle({ title: `Likes: ${data.likeCount}\nDislikes: ${data.dislikeCount}` }); return data; })
                             .then(data => Object.assign({ url: `${options.url}/api/v1/videos/${request.videoId}?fields=likeCount,dislikeCount` }, data))
                             .then(data => sendResponse(data))
                             .catch(err => sendResponse({ error: err }))
