@@ -4,23 +4,7 @@
         return d ? d.querySelector('#top-level-buttons-computed') : false;
     }
 
-    function getLikeButton() {
-        return getButtons().children[0];
-    }
-
-    function getDislikeButton() {
-        return getButtons().children[1];
-    }
-
-    function setLikes(likesCount) {
-        getLikeButton().querySelector('#text').innerText = likesCount;
-    }
-
-    function setDislikes(dislikesCount) {
-        getDislikeButton().querySelector('#text').innerText = dislikesCount;
-    }
-
-    function setState() {
+    function update() {
         chrome.runtime.sendMessage(
             extensionId, {
                 message: 'fetch_from_api',
@@ -28,23 +12,25 @@
             },
             function(response) {
                 if (response != undefined) {
+                    console.log(`[I Like Dislike]: likes: ${response.likeCount}, dislikes: ${response.dislikeCount}`);
                     try {
-                        if (response.dislikeCount) {
-                            const formattedDislike = numberFormat(response.dislikeCount);
-                            setDislikes(formattedDislike);
-                            statsSet = true;
+                        let buttons = getButtons();
+                        if (buttons) {
+                            if (response.dislikeCount) {
+                                buttons.children[1].querySelector('#text').innerText = numberFormat(response.dislikeCount);
+                            }
+                            if (response.likeCount) {
+                                buttons.children[0].querySelector('#text').innerText = numberFormat(response.likeCount);
+                            }
                         }
                     } catch (e) {
-                        statsSet = false;
+                        console.error(e.message);
                     }
                 }
             }
         );
     }
 
-    function setInitalState() {
-        setState();
-    }
 
     function getVideoId(url) {
         const urlObject = new URL(url);
@@ -73,10 +59,10 @@
             if (buttons && buttons.offsetParent && isVideoLoaded()) {
                 clearInterval(jsInitChecktimer);
                 jsInitChecktimer = null;
+                update();
                 if (!window.returnDislikeButtonlistenersSet) {
                     window.returnDislikeButtonlistenersSet = true;
                 }
-                //setInitalState();
             }
         }
 
@@ -85,11 +71,7 @@
         }
     }
 
-
     setEventListeners();
 
-    document.addEventListener('yt-navigate-finish', function(event) {
-        setInitalState();
-    });
 
 })(document.currentScript.getAttribute('extension-id'));
