@@ -13,7 +13,7 @@
             },
             function(response) {
                 if (response != undefined) {
-                    console.log(`[I Like Dislike] Video: ${videoID} likes: ${response.likeCount}, dislikes: ${response.dislikeCount}`);
+                    console.log(`[I Like Dislike] Video: ${videoID}, likes: ${response.likeCount}, dislikes: ${response.dislikeCount}, error: ${response.error || ''}, url: ${response.url}`);
                     try {
                         let buttons = getButtons();
                         if (buttons) {

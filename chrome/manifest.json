@@ -1,7 +1,7 @@
 {
     "name": "I Like Dislike",
     "description": "Shows dislikes counter on YouTube page",
-    "version": "0.0.0.1",
+    "version": "0.0.0.2",
     "manifest_version": 3,
     "background": {
         "service_worker": "background.js"
