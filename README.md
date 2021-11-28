@@ -1,6 +1,6 @@
 # I Like Dislike
 A browser extension (currently Chrome only) that shows YouTube video dislike count (again).
-Doesn't use third party services but requires a Google API key so uses API requests.
+Requires a Google API key for API requests or third party YouTube alternatives from invidious.io project.
 
 Inspired by (and partialy used):
 - https://github.com/elliotwaite/thumbnail-rating-bar-for-youtube

@@ -11,12 +11,14 @@
             align-items: center;
         }
         
-        h4 {
+        h4,
+        h5 {
             margin: 0;
             padding: 0 1em 1em 0;
         }
         
-        #key {
+        #key,
+        #url {
             width: 100%;
         }
         
@@ -30,6 +32,8 @@
 <body>
     <h4>Enter your YouTube API key:</h4>
     <input type="text" id="key" />
+    <h5>If no API key use YouTube alternative:</h5>
+    <select id="url"></select>
     <button id="save">Save</button>
     <script src="options.js"></script>
 </body>
