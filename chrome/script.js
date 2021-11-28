@@ -30,11 +30,12 @@
                 if (response != undefined) {
                     try {
                         if (response.dislikeCount) {
-                            setLikes(numberFormat(response.likeCount));
-                            setDislikes(numberFormat(response.dislikeCount));
+                            const formattedDislike = numberFormat(response.dislikeCount);
+                            setDislikes(formattedDislike);
+                            statsSet = true;
                         }
                     } catch (e) {
-                        console.error('I Like Dislike', e);
+                        statsSet = false;
                     }
                 }
             }
@@ -75,6 +76,7 @@
                 if (!window.returnDislikeButtonlistenersSet) {
                     window.returnDislikeButtonlistenersSet = true;
                 }
+                //setInitalState();
             }
         }
 
@@ -89,4 +91,5 @@
     document.addEventListener('yt-navigate-finish', function(event) {
         setInitalState();
     });
+
 })(document.currentScript.getAttribute('extension-id'));
