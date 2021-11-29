@@ -14,3 +14,4 @@ Dones't use Google API calls ao any third party service.
 Inspired by (and partialy used):
 - https://github.com/elliotwaite/thumbnail-rating-bar-for-youtube
 - https://github.com/Anarios/return-youtube-dislike
+- https://greasyfork.org/ru/scripts/436032-show-youtube-dislike-count
