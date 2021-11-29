@@ -1,74 +1,96 @@
 (function(extensionId) {
-    function getButtons() {
-        let d = document.getElementById('menu-container');
-        return d ? d.querySelector('#top-level-buttons-computed') : false;
-    }
+    'use strict';
 
+    let isLoaded = false;
+    let likeText, dislikeText;
+    let likeBarContainer, tooltip;
 
-    function update() {
-        let videoID = getVideoId(window.location.href);
-        let buttons = getButtons();
-        if (buttons) {
-            buttons.children[1].querySelector('#text').innerText = 'DISLIKE';
-            chrome.runtime.sendMessage(
-                extensionId, {
-                    message: 'fetch_from_api',
-                    videoId: videoID
-                },
-                function(response) {
-                    if (response != undefined) {
-                        console.log(`[I Like Dislike] Video: ${videoID}, likes: ${response.likeCount}, dislikes: ${response.dislikeCount}, error: ${response.error || ''}`);
-                        buttons.children[1].querySelector('#text').innerText = response.dislikeCount ? numberFormat(response.dislikeCount) : 'DISLIKE';
-                    }
-                }
-            );
+    window.addEventListener('yt-page-data-updated', UpdateCounter);
+
+    (async() => {
+        await WaitElementsLoaded("a.yt-simple-endpoint > yt-formatted-string.ytd-toggle-button-renderer");
+
+        isLoaded = true;
+
+        likeBarContainer = document.body.querySelector('ytd-sentiment-bar-renderer');
+        tooltip = likeBarContainer.querySelector('#tooltip');
+
+        likeBarContainer.querySelector('#container').addEventListener('mouseover', () => {
+            tooltip.classList.remove('hidden');
+        });
+        likeBarContainer.querySelector('#container').addEventListener('mouseleave', () => {
+            tooltip.classList.add('hidden');
+        });
+
+        const buttons = document.body.querySelectorAll('a.yt-simple-endpoint > yt-formatted-string.ytd-toggle-button-renderer');
+        likeText = buttons[0];
+        dislikeText = buttons[1];
+        dislikeTextDefault = dislikeText.innerHTML;
+    })();
+
+    async function UpdateCounter() {
+        while (!isLoaded) {
+            await Sleep(100);
         }
-    }
 
+        const data = document.querySelector("ytd-app")?.data;
+        const contents = data?.response.contents.twoColumnWatchNextResults?.results.results.contents;
 
-    function getVideoId(url) {
-        const urlObject = new URL(url);
-        const videoId = urlObject.searchParams.get('v');
-        return videoId;
-    }
+        if (data && contents) {
+            let videoInfo;
 
-    function isVideoLoaded() {
-        const videoId = getVideoId(window.location.href);
-        return (
-            document.querySelector(`ytd-watch-flexy[video-id='${videoId}']`) !== null
-        );
-    }
-
-    function numberFormat(numberState) {
-        const userLocales = navigator.language;
-        const formatter = Intl.NumberFormat(userLocales, { notation: 'compact' });
-        return formatter.format(numberState);
-    }
-
-    var jsInitChecktimer = null;
-
-    function setEventListeners(evt) {
-        function checkForJS_Finish() {
-            const buttons = getButtons();
-            if (buttons && buttons.offsetParent && isVideoLoaded()) {
-                clearInterval(jsInitChecktimer);
-                jsInitChecktimer = null;
-                update();
-                if (!window.returnDislikeButtonlistenersSet) {
-                    window.returnDislikeButtonlistenersSet = true;
+            for (const content of contents) {
+                if (content.videoPrimaryInfoRenderer) {
+                    videoInfo = content.videoPrimaryInfoRenderer;
+                    break;
                 }
             }
-        }
 
-        if (window.location.href.indexOf('watch?') >= 0) {
-            jsInitChecktimer = setInterval(checkForJS_Finish, 111);
+            const likeCount = parseInt(videoInfo?.videoActions.menuRenderer.topLevelButtons[0].toggleButtonRenderer.accessibility.label.replace(/\D/g, ''));
+
+            if (likeCount >= 0) {
+                const r = data.playerResponse.videoDetails.averageRating;
+                const dislikeCount = Math.round(likeCount * (5 - r) / (r - 1));
+                console.log(`Likes: ${likeCount}, dislikes: ${dislikeCount}, ratio: ${r}`)
+                ShowDislikes(likeCount, dislikeCount);
+            }
         }
     }
 
-    setEventListeners();
+    function ShowDislikes(likeCount, dislikeCount) {
+        dislikeText.innerHTML = formatNumber(dislikeCount);
 
-    document.addEventListener('yt-navigate-finish', function(event) {
-        update();
-    });
+        if (likeBarContainer) {
+            const likeBarWidth = likeText.parentNode.parentNode.getBoundingClientRect().width + dislikeText.parentNode.parentNode.getBoundingClientRect().width + 8;
+            likeBarContainer.style.width = `${likeBarWidth}px`;
+            likeBarContainer.removeAttribute('hidden');
 
+            const likePerc = Math.floor(likeCount / (likeCount + dislikeCount) * 100);
+
+            likeBarContainer.querySelector('#like-bar').style.width = `${likePerc}%`;
+            tooltip.innerHTML = `${likeCount.toLocaleString()} / ${dislikeCount.toLocaleString()}`;
+        }
+    }
+
+    function formatNumber(num) {
+        return Intl.NumberFormat(navigator.language, { notation: 'compact' }).format(num);
+    }
+
+    function WaitElementsLoaded(...elementsQueries) {
+        return Promise.all(elementsQueries.map(ele => {
+            return new Promise(async resolve => {
+                while (!document.querySelector(ele)) {
+                    await Sleep(100);
+                }
+
+                resolve();
+            });
+        }));
+    }
+
+    function Sleep(timeout) {
+        return new Promise(resolve => {
+            setTimeout(() => resolve(), timeout);
+        });
+    }
 })(document.currentScript.getAttribute('extension-id'));
