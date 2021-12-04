@@ -7,7 +7,7 @@
 
 # I Like Dislike
 A browser extension (currently Chrome™ only) that shows YouTube™ video dislike count (again).
-Dones't use Google API calls ao any third party service.
+Dones't use Google API calls or any third party service.
 
 <img src="https://raw.githubusercontent.com/savostin/i-like-dislike/master/screen.png" />
 
